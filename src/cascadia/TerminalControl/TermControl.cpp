@@ -910,6 +910,15 @@ namespace winrt::Microsoft::Terminal::Control::implementation
         // Update our control settings
         const auto bg = newAppearance.DefaultBackground();
 
+        // The focused and unfocused appearances can have different acrylic
+        // blur amounts. The blur is baked into the brush (and may even need a
+        // different kind of brush), so rebuild it only when it changes.
+        if (const auto blur = newAppearance.AcrylicBlur(); blur != _acrylicBlur)
+        {
+            _acrylicBlur = blur;
+            _InitializeBackgroundBrush();
+        }
+
         // In the future, this might need to be changed to a
         // _InitializeBackgroundBrush call instead, because we may need to
         // switch from a solid color brush to an acrylic one.
@@ -981,6 +990,7 @@ namespace winrt::Microsoft::Terminal::Control::implementation
     // - <none>
     void TermControl::_ApplyUISettings()
     {
+        _acrylicBlur = _core->FocusedAppearance().AcrylicBlur();
         _InitializeBackgroundBrush();
 
         // settings might be out-of-proc in the future
@@ -1111,7 +1121,7 @@ namespace winrt::Microsoft::Terminal::Control::implementation
             // a different amount, use our own brush, which can only do that
             // for the in-app Backdrop source (HostBackdrop arrives pre-blurred
             // by the system).
-            const auto blurAmount = _core->FocusedAppearance().AcrylicBlur();
+            const auto blurAmount = _acrylicBlur;
             const auto wantCustomBlur = useBackdrop && blurAmount != implementation::BlurredAcrylicBrush::DefaultBlurAmount;
 
             // See if we've already got an acrylic background brush

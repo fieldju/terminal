@@ -322,6 +322,7 @@ namespace winrt::Microsoft::Terminal::Control::implementation
         void _ShowResizeOverlay();
 
         bool _isBackgroundLight{ false };
+        float _acrylicBlur{ 30.0f };
         bool _detached{ false };
         til::CoordType _searchScrollOffset = 0;
 
