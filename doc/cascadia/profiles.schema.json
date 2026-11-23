@@ -291,6 +291,13 @@
           "description": "Use to set a path to an image that's made available to the `experimental.pixelShaderPath` shader in texture register t1 when unfocused. This is an experimental feature, and its continued existence is not guaranteed.",
           "type": "string"
         },
+        "acrylicBlur": {
+          "default": 30,
+          "description": "How strongly the acrylic background is blurred. 0 disables the blur. Only takes effect when \"compatibility.enableUnfocusedAcrylic\" is true.",
+          "maximum": 250,
+          "minimum": 0,
+          "type": "number"
+        },
         "useAcrylic": {
           "description": "When set to true, the window will have an acrylic material background when unfocused. When set to false, the window will have a plain, untextured background when unfocused.",
           "type": "boolean"
@@ -3305,6 +3312,13 @@
             "string",
             "null"
           ]
+        },
+        "acrylicBlur": {
+          "default": 30,
+          "description": "How strongly the acrylic background is blurred. 0 disables the blur. Only takes effect when \"compatibility.enableUnfocusedAcrylic\" is true.",
+          "maximum": 250,
+          "minimum": 0,
+          "type": "number"
         },
         "useAcrylic": {
           "default": false,

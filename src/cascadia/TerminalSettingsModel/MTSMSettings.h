@@ -156,7 +156,8 @@ Author(s):
     X(IMediaResource, BackgroundImagePath, "backgroundImage", implementation::MediaResource::Empty())                                                              \
     X(Model::IntenseStyle, IntenseTextStyle, "intenseTextStyle", Model::IntenseStyle::Bright)                                                                      \
     X(Core::AdjustTextMode, AdjustIndistinguishableColors, "adjustIndistinguishableColors", Core::AdjustTextMode::Automatic)                                       \
-    X(bool, UseAcrylic, "useAcrylic", false)
+    X(bool, UseAcrylic, "useAcrylic", false)                                                                                                                       \
+    X(float, AcrylicBlur, "acrylicBlur", 30.0f)
 
 // Intentionally omitted Appearance settings:
 // * ForegroundKey, BackgroundKey, SelectionBackgroundKey, CursorColorKey: all optional colors

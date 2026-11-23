@@ -1,0 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+namespace Microsoft.Terminal.Control
+{
+    // An AcrylicBrush whose blur amount can be changed. The stock AcrylicBrush
+    // always blurs by 30. This one draws the Backdrop (in-app) source through
+    // its own blur + tint effect graph instead. It still exposes the
+    // AcrylicBrush properties (TintColor, TintOpacity, FallbackColor) so
+    // everything that inspects the terminal's background brush keeps working.
+    [default_interface] runtimeclass BlurredAcrylicBrush : Windows.UI.Xaml.Media.AcrylicBrush
+    {
+        BlurredAcrylicBrush();
+        Single BlurAmount;
+    }
+}

@@ -4,6 +4,8 @@
 #include "pch.h"
 #include "TermControl.h"
 
+#include "BlurredAcrylicBrush.h"
+
 #include <DefaultSettings.h>
 #include <inputpaneinterop.h>
 
@@ -1103,18 +1105,45 @@ namespace winrt::Microsoft::Terminal::Control::implementation
         // changed from what was in the original settings.
         if (_core->UseAcrylic() && !transparentBg)
         {
+            const auto useBackdrop = _core->Settings().EnableUnfocusedAcrylic();
+
+            // The stock AcrylicBrush always blurs by 30. If the user asked for
+            // a different amount, use our own brush, which can only do that
+            // for the in-app Backdrop source (HostBackdrop arrives pre-blurred
+            // by the system).
+            const auto blurAmount = _core->FocusedAppearance().AcrylicBlur();
+            const auto wantCustomBlur = useBackdrop && blurAmount != implementation::BlurredAcrylicBrush::DefaultBlurAmount;
+
             // See if we've already got an acrylic background brush
             // to avoid the flicker when setting up a new one
             auto acrylic = RootGrid().Background().try_as<Media::AcrylicBrush>();
 
+            // ...but only reuse it if it's the right kind of acrylic brush.
+            if (acrylic && (acrylic.try_as<Control::BlurredAcrylicBrush>() != nullptr) != wantCustomBlur)
+            {
+                acrylic = nullptr;
+            }
+
             // Instantiate a brush if there's not already one there
             if (acrylic == nullptr)
             {
-                acrylic = Media::AcrylicBrush{};
+                if (wantCustomBlur)
+                {
+                    acrylic = winrt::make<implementation::BlurredAcrylicBrush>();
+                }
+                else
+                {
+                    acrylic = Media::AcrylicBrush{};
+                }
+            }
+
+            if (const auto blurred = acrylic.try_as<Control::BlurredAcrylicBrush>())
+            {
+                blurred.BlurAmount(blurAmount);
             }
 
             const auto backdropStyle =
-                _core->Settings().EnableUnfocusedAcrylic() ? Media::AcrylicBackgroundSource::Backdrop : Media::AcrylicBackgroundSource::HostBackdrop;
+                useBackdrop ? Media::AcrylicBackgroundSource::Backdrop : Media::AcrylicBackgroundSource::HostBackdrop;
             acrylic.BackgroundSource(backdropStyle);
 
             // see GH#1082: Initialize background color so we don't get a

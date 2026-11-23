@@ -21,6 +21,7 @@
 #define CONTROL_APPEARANCE_SETTINGS(X)                                                                                                          \
     X(float, Opacity, 1.0f)                                                                                                                     \
     X(bool, UseAcrylic, false)                                                                                                                  \
+    X(float, AcrylicBlur, 30.0f)                                                                                                                \
     X(winrt::hstring, BackgroundImage)                                                                                                          \
     X(float, BackgroundImageOpacity, 1.0f)                                                                                                      \
     X(winrt::Windows::UI::Xaml::Media::Stretch, BackgroundImageStretchMode, winrt::Windows::UI::Xaml::Media::Stretch::UniformToFill)            \
